@@ -40,6 +40,7 @@ class User(Base):
     )
     hashed_password: Mapped[str] = mapped_column(String(128), nullable=False)
     refresh_tokens: Mapped[list["RefreshToken"]] = relationship(back_populates="user")
+    roles: Mapped[list["UserRole"]] = relationship(back_populates="user")
 
 
 class RefreshToken(Base):
@@ -55,3 +56,72 @@ class RefreshToken(Base):
         ForeignKey("user_account.user_id", ondelete="CASCADE"),
     )
     user: Mapped["User"] = relationship(back_populates="refresh_tokens")
+
+
+class Role(Base):
+    __tablename__ = "role"
+
+    role_id: Mapped[str] = mapped_column(
+        Uuid(as_uuid=False), primary_key=True, default=lambda _: str(uuid.uuid4())
+    )
+    name: Mapped[str] = mapped_column(
+        String(256), nullable=False, unique=True, index=True
+    )
+    description: Mapped[str] = mapped_column(String(256), nullable=False)
+    users: Mapped[list["UserRole"]] = relationship(back_populates="role")
+    permissions: Mapped[list["RolePermission"]] = relationship(back_populates="role")
+
+
+class UserRole(Base):
+    __tablename__ = "user_role"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("user_account.user_id", ondelete="CASCADE"),
+    )
+    role_id: Mapped[str] = mapped_column(
+        ForeignKey("role.role_id", ondelete="CASCADE"),
+    )
+    user: Mapped["User"] = relationship(back_populates="roles")
+    role: Mapped["Role"] = relationship(back_populates="users")
+
+
+class Permission(Base):
+    __tablename__ = "permission"
+
+    permission_id: Mapped[str] = mapped_column(
+        Uuid(as_uuid=False), primary_key=True, default=lambda _: str(uuid.uuid4())
+    )
+    name: Mapped[str] = mapped_column(
+        String(256), nullable=False, unique=True, index=True
+    )
+    description: Mapped[str] = mapped_column(String(256), nullable=False)
+    roles: Mapped[list["RolePermission"]] = relationship(back_populates="permission")
+
+
+class RolePermission(Base):
+    __tablename__ = "role_permission"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    role_id: Mapped[str] = mapped_column(
+        ForeignKey("role.role_id", ondelete="CASCADE"),
+    )
+    permission_id: Mapped[str] = mapped_column(
+        ForeignKey("permission.permission_id", ondelete="CASCADE"),
+    )
+    role: Mapped["Role"] = relationship(back_populates="permissions")
+    permission: Mapped["Permission"] = relationship(back_populates="roles")
+
+
+class AuditLog(Base):
+    __tablename__ = "audit_log"
+
+    log_id: Mapped[str] = mapped_column(
+        Uuid(as_uuid=False), primary_key=True, default=lambda _: str(uuid.uuid4())
+    )
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("user_account.user_id", ondelete="CASCADE"),
+    )
+    action: Mapped[str] = mapped_column(String(256), nullable=False)
+    timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    description: Mapped[str] = mapped_column(String(256), nullable=False)
