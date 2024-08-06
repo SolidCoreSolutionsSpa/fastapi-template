@@ -24,7 +24,7 @@ class BaseService(ABC, Generic[RequestType, ResponseType]):
         pass
 
     @abstractmethod
-    def parse_response(self, response: dict) -> ResponseType:
+    def parse_response(self, response: dict[str, any]) -> ResponseType:
         """
         Método abstracto que debe analizar la respuesta en el tipo de respuesta deseado.
         """
@@ -63,7 +63,7 @@ class BaseService(ABC, Generic[RequestType, ResponseType]):
                 response.raise_for_status()
             except httpx.HTTPStatusError as exc:
                 logger.error(
-                    f"Error response {exc.response.status_code} while making request to {url}. Response content: {exc.response.content}"
+                    f"Error response {exc.response.status_code} while making request to {url}. Response content: {exc.response.content.decode('utf-8')}"
                 )
                 raise exc
             except Exception as exc:
