@@ -80,6 +80,6 @@ class BaseService(ABC, Generic[RequestType, ResponseType]):
                 return self.parse_response(response_data)
             except Exception as exc:
                 logger.error(
-                    f"An error occurred while parsing response from {url} with params {params}"
+                    f"An error occurred  while parsing response from {url} with params {params}"
                 )
                 raise exc
