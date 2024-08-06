@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeVar
 
 import httpx
 from pydantic import BaseModel
@@ -24,7 +24,7 @@ class BaseService(ABC, Generic[RequestType, ResponseType]):
         pass
 
     @abstractmethod
-    def parse_response(self, response: dict[str, any]) -> ResponseType:
+    def parse_response(self, response: dict[str, Any]) -> ResponseType:
         """
         Método abstracto que debe analizar la respuesta en el tipo de respuesta deseado.
         """
