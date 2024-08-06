@@ -17,8 +17,8 @@ from app.core.security.password import (
     verify_password,
 )
 from app.models import RefreshToken, User
-from app.schemas.requests import RefreshTokenRequest, UserCreateRequest
-from app.schemas.responses import AccessTokenResponse, UserResponse
+from app.api.schemas.auth.requests import RefreshTokenRequest, UserCreateRequest
+from app.api.schemas.auth.responses import AccessTokenResponse, UserResponse
 
 router = APIRouter()
 

@@ -5,8 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api import deps
 from app.core.security.password import get_password_hash
 from app.models import User
-from app.schemas.requests import UserUpdatePasswordRequest
-from app.schemas.responses import UserResponse
+from app.api.schemas.auth.requests import UserUpdatePasswordRequest
+from app.api.schemas.auth.responses import UserResponse
 
 router = APIRouter()
 
