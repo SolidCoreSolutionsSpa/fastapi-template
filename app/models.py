@@ -56,6 +56,7 @@ class RefreshToken(Base):
     )
     user: Mapped["User"] = relationship(back_populates="refresh_tokens")
 
+
 class Role(Base):
     __tablename__ = "role"
 
@@ -66,6 +67,7 @@ class Role(Base):
         String(256), nullable=False, unique=True, index=True
     )
     description: Mapped[str] = mapped_column(String(256), nullable=False)
+
 
 class UserRole(Base):
     __tablename__ = "user_role"
@@ -80,6 +82,7 @@ class UserRole(Base):
     user: Mapped["User"] = relationship(back_populates="roles")
     role: Mapped["Role"] = relationship(back_populates="users")
 
+
 class Permission(Base):
     __tablename__ = "permission"
 
@@ -90,6 +93,7 @@ class Permission(Base):
         String(256), nullable=False, unique=True, index=True
     )
     description: Mapped[str] = mapped_column(String(256), nullable=False)
+
 
 class RolePermission(Base):
     __tablename__ = "role_permission"
@@ -104,6 +108,7 @@ class RolePermission(Base):
     role: Mapped["Role"] = relationship(back_populates="permissions")
     permission: Mapped["Permission"] = relationship(back_populates="roles")
 
+
 class AuditLog(Base):
     __tablename__ = "audit_log"
 
@@ -116,5 +121,3 @@ class AuditLog(Base):
     action: Mapped[str] = mapped_column(String(256), nullable=False)
     timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     description: Mapped[str] = mapped_column(String(256), nullable=False)
-
-
