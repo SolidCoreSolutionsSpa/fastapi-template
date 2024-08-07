@@ -9,8 +9,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api import api_messages, deps
-from app.api.schemas.auth.requests import RefreshTokenRequest, UserCreateRequest
-from app.api.schemas.auth.responses import AccessTokenResponse, UserResponse
 from app.core.config import get_settings
 from app.core.security.jwt import create_jwt_token
 from app.core.security.password import (
@@ -19,6 +17,8 @@ from app.core.security.password import (
     verify_password,
 )
 from app.models import RefreshToken, User
+from app.schemas.requests import RefreshTokenRequest, UserCreateRequest
+from app.schemas.responses import AccessTokenResponse, UserResponse
 
 router = APIRouter()
 
